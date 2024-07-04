@@ -33,11 +33,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\brett\\Documents\\cSharp\\TicTacToe\\PlayGame\\PlayGame.csproj",
+      "projectUniqueName": "C:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\PlayGame.csproj",
       "projectName": "PlayGame",
-      "projectPath": "C:\\Users\\brett\\Documents\\cSharp\\TicTacToe\\PlayGame\\PlayGame.csproj",
+      "projectPath": "C:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\PlayGame.csproj",
       "packagesPath": "C:\\Users\\brett\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\brett\\Documents\\cSharp\\TicTacToe\\PlayGame\\obj\\",
+      "outputPath": "C:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -59,8 +59,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\brett\\Documents\\cSharp\\TicTacToe\\TicTacToe\\TicTacToe.csproj": {
-              "projectPath": "C:\\Users\\brett\\Documents\\cSharp\\TicTacToe\\TicTacToe\\TicTacToe.csproj"
+            "C:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\TicTacToe\\TicTacToe.csproj": {
+              "projectPath": "C:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\TicTacToe\\TicTacToe.csproj"
             }
           }
         }
@@ -95,7 +95,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

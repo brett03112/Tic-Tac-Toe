@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = PlayGame
-build_property.ProjectDir = C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\
+build_property.ProjectDir = C:\Users\brett\Documents\csharp\Tic-Tac-Toe\PlayGame\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

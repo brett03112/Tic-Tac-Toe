@@ -26,9 +26,9 @@ public class TicTacToe
         
         #region CreateBoard method
         /// <summary>
-            /// Creates a 6x11 character array representing a Tic-Tac-Toe board.
+        /// Creates a 6x11 character array representing a Tic-Tac-Toe board.
         /// </summary>
-            /// <returns>A 6x11 character array representing a Tic-Tac-Toe board.</returns>
+        /// <returns>A 6x11 character array representing a Tic-Tac-Toe board.</returns>
         public static char[,] CreateBoard()
         {
             char[,] board = new char[6, 11];
@@ -68,6 +68,10 @@ public class TicTacToe
     #endregion
         
         #region DisplayBoard method
+        /// <summary>
+        /// Displays the Tic-Tac-Toe board.
+        /// </summary>
+        /// <param name="board"></param> 
         public static void DisplayBoard(char[,] board)
         {
             for (int i = 0; i < 6; i++)
@@ -83,11 +87,11 @@ public class TicTacToe
 
         #region PlayGame method
         /// <summary>
-            /// Plays a game of Tic Tac Toe between two players.
+        /// Plays a game of Tic Tac Toe between two players.
         /// </summary>
-            /// <param name="player1">The name of player 1.</param>
-            /// <param name="player2">The name of player 2.</param>
-            /// <param name="board">The game board.</param>
+        /// <param name="player1">The name of player 1.</param>
+        /// <param name="player2">The name of player 2.</param>
+        /// <param name="board">The game board.</param>
         public static void PlayGame(string player1, string player2, char[,] board)
         {
             string winner = " ";
@@ -102,7 +106,7 @@ public class TicTacToe
                 UpdateBoardPlayer1(player1Choice, board);
                 DisplayBoard(board);
                 tie = CheckTie(board);
-                if (tie == true)
+                if (tie)
                 {
                     WriteLine("It's a tie!");
                     break;
@@ -140,15 +144,15 @@ public class TicTacToe
 
         #region UpdateBoardPlayer1 method
         /// <summary>
-            /// Updates the Tic-Tac-Toe board with the player 1's choice.
+        /// Updates the Tic-Tac-Toe board with the player 1's choice.
         /// </summary>
-            /// <param name="player1Choice">The choice made by player 1 (1-9).</param>
-            /// <param name="board">The Tic-Tac-Toe board.</param>
+        /// <param name="player1Choice">The choice made by player 1 (1-9).</param>
+        /// <param name="board">The Tic-Tac-Toe board.</param>
         public static void UpdateBoardPlayer1(int player1Choice, char[,] board)
         {
             if (player1Choice == 1 && board[0,1] == ' ')
             {
-            board[0, 1] = 'X';
+                board[0, 1] = 'X';
             }
             else if (player1Choice == 2 && board[0, 5] == ' ')
             {
@@ -194,10 +198,10 @@ public class TicTacToe
 
         #region UpdateBoardPlayer2 method
         /// <summary>
-            /// Updates the Tic-Tac-Toe board with the player 2's choice.
-            /// </summary>
-            /// <param name="player2Choice">The choice made by player 2 (1-9).</param>
-            /// <param name="board">The Tic-Tac-Toe board.</param>
+        /// Updates the Tic-Tac-Toe board with the player 2's choice.
+        /// </summary>
+        /// <param name="player2Choice">The choice made by player 2 (1-9).</param>
+        /// <param name="board">The Tic-Tac-Toe board.</param>
         public static void UpdateBoardPlayer2(int player2Choice, char[,] board)
         {
             if (player2Choice == 1 && board[0, 1] == ' ')
@@ -248,10 +252,10 @@ public class TicTacToe
 
         #region checkWinner method
         /// <summary>
-            /// Checks if there is a winner on the Tic-Tac-Toe board.
+        /// Checks if there is a winner on the Tic-Tac-Toe board.
         /// </summary>
-            /// <param name="board">The Tic-Tac-Toe board represented as a 2D character array.</param>
-            /// <returns>True if there is a winner, false otherwise.</returns>
+        /// <param name="board">The Tic-Tac-Toe board represented as a 2D character array.</param>
+        /// <returns>True if there is a winner, false otherwise.</returns>
         public static bool checkWinner(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
         {
             if ((board[0, 1] == board[0, 5]) && (board[0, 5] == board[0, 9]) && (board[0,9] != ' '))// top row
