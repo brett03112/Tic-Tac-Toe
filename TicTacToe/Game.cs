@@ -1,4 +1,7 @@
-﻿namespace PlayGame;
+﻿using System.Reflection.Metadata.Ecma335;
+using Microsoft.VisualBasic;
+
+namespace TicTacToeGame;
 
 /*
         Make a playable TicTacToe game with game board
@@ -103,7 +106,15 @@ public class TicTacToe
             {
                 WriteLine("Player 1 enter a number between 1 and 9: ");
                 player1Choice = Convert.ToInt32(ReadLine());
-                UpdateBoardPlayer1(player1Choice, board);
+                if (IsValidChoice(player1Choice))
+                {
+                    UpdateBoardPlayer1(player1Choice, board);
+                }
+                else
+                {
+                    InvalidChoicePlayer1(player1Choice, board);
+                }
+                
                 DisplayBoard(board);
                 tie = CheckTie(board);
                 if (tie)
@@ -122,7 +133,14 @@ public class TicTacToe
                 
                 WriteLine("Player 2 enter a number between 1 and 9: ");
                 player2Choice = Convert.ToInt32(ReadLine());
-                UpdateBoardPlayer2(player2Choice, board);
+                if (IsValidChoice(player2Choice))
+                {
+                    UpdateBoardPlayer2(player2Choice, board);
+                }
+                else
+                {
+                    InvalidChoicePlayer2(player2Choice, board);
+                }
                 DisplayBoard(board);
                 tie = CheckTie(board);
                 if (tie == true)
@@ -150,49 +168,22 @@ public class TicTacToe
         /// <param name="board">The Tic-Tac-Toe board.</param>
         public static void UpdateBoardPlayer1(int player1Choice, char[,] board)
         {
-            if (player1Choice == 1 && board[0,1] == ' ')
+            char x = 'X';
+            #pragma warning disable CS8846 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+            char update = board switch
             {
-                board[0, 1] = 'X';
-            }
-            else if (player1Choice == 2 && board[0, 5] == ' ')
-            {
-                board[0, 5] = 'X';
-            }
-            else if (player1Choice == 3 && board[0, 9] == ' ')
-            {
-                board[0, 9] = 'X';
-            }
-            else if (player1Choice == 4 && board[2, 1] == ' ')
-            {
-                board[2, 1] = 'X';
-            }
-            else if (player1Choice == 5 && board[2, 5] == ' ')
-            {
-                board[2, 5] = 'X';
-            }
-            else if (player1Choice == 6 && board[2, 9] == ' ')
-            {
-                board[2, 9] = 'X';
-            }
-            else if (player1Choice == 7 && board[4, 1] == ' ')
-            {
-                board[4, 1] = 'X';
-            }
-            else if (player1Choice == 8 && board[4, 5] == ' ')
-            {
-                board[4, 5] = 'X';
-            }
-            else if (player1Choice == 9 && board[4, 9] == ' ')
-            {
-                board[4, 9] = 'X';
-            }
-            else
-            {
-                WriteLine("Invalid Choice");
-                WriteLine("Player 1 enter a number between 1 and 9: ");
-                player1Choice = Convert.ToInt32(ReadLine());
-                UpdateBoardPlayer1(player1Choice, board);
-            }        
+                var letter when player1Choice == 1 && board[0, 1] == ' ' => board[0, 1] = x,
+                var letter when player1Choice == 2 && board[0, 5] == ' ' => board[0, 5] = x,
+                var letter when player1Choice == 3 && board[0, 9] == ' ' => board[0, 9] = x,
+                var letter when player1Choice == 4 && board[2, 1] == ' ' => board[2, 1] = x,
+                var letter when player1Choice == 5 && board[2, 5] == ' ' => board[2, 5] = x,
+                var letter when player1Choice == 6 && board[2, 9] == ' ' => board[2, 9] = x,
+                var letter when player1Choice == 7 && board[4, 1] == ' ' => board[4, 1] = x,
+                var letter when player1Choice == 8 && board[4, 5] == ' ' => board[4, 5] = x,
+                var letter when player1Choice == 9 && board[4, 9] == ' ' => board[4, 9] = x,
+                _ => throw new ArgumentException("Invalid choice. Space is already taken.", nameof(player1Choice)),
+            };
+       
         }
         #endregion
 
@@ -204,49 +195,23 @@ public class TicTacToe
         /// <param name="board">The Tic-Tac-Toe board.</param>
         public static void UpdateBoardPlayer2(int player2Choice, char[,] board)
         {
-            if (player2Choice == 1 && board[0, 1] == ' ')
+            char o = 'O';
+            #pragma warning disable CS8846 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
+            char update = board switch
             {
-                board[0, 1] = 'O';
-            }
-            else if (player2Choice == 2 && board[0, 5] == ' ')
-            {
-                board[0, 5] = 'O';
-            }
-            else if (player2Choice == 3 && board[0, 9] == ' ')
-            {
-                board[0, 9] = 'O';
-            }
-            else if (player2Choice == 4 && board[2, 1] == ' ')
-            {
-                board[2, 1] = 'O';
-            }
-            else if (player2Choice == 5 && board[2, 5] == ' ')
-            {
-                board[2, 5] = 'O';
-            }
-            else if (player2Choice == 6 && board[2, 9] == ' ')
-            {
-                board[2, 9] = 'O';
-            }
-            else if (player2Choice == 7 && board[4, 1] == ' ')
-            {
-                board[4, 1] = 'O';
-            }
-            else if (player2Choice == 8 && board[4, 5] == ' ')
-            {
-                board[4, 5] = 'O';
-            }
-            else if (player2Choice == 9 && board[4, 9] == ' ')
-            {
-                board[4, 9] = 'O';
-            }
-            else
-            {
-                WriteLine("Invalid choice");
-                WriteLine("Player 2 enter a number between 1 and 9: ");
-                player2Choice = Convert.ToInt32(ReadLine());
-                UpdateBoardPlayer2(player2Choice, board);
-            }                     
+                var letter when player2Choice == 1 && board[0, 1] == ' ' => board[0, 1] = o,
+                var letter when player2Choice == 2 && board[0, 5] == ' ' => board[0, 5] = o,
+                var letter when player2Choice == 3 && board[0, 9] == ' ' => board[0, 9] = o,
+                var letter when player2Choice == 4 && board[2, 1] == ' ' => board[2, 1] = o,
+                var letter when player2Choice == 5 && board[2, 5] == ' ' => board[2, 5] = o,
+                var letter when player2Choice == 6 && board[2, 9] == ' ' => board[2, 9] = o,
+                var letter when player2Choice == 7 && board[4, 1] == ' ' => board[4, 1] = o,
+                var letter when player2Choice == 8 && board[4, 5] == ' ' => board[4, 5] = o,
+                var letter when player2Choice == 9 && board[4, 9] == ' ' => board[4, 9] = o,
+                _ => throw new ArgumentException("Invalid choice. Space is already taken.", nameof(player2Choice)),
+            };
+            
+                                 
         }
         #endregion
 
@@ -257,50 +222,21 @@ public class TicTacToe
         /// <param name="board">The Tic-Tac-Toe board represented as a 2D character array.</param>
         /// <returns>True if there is a winner, false otherwise.</returns>
         public static bool checkWinner(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
-        {
-            if ((board[0, 1] == board[0, 5]) && (board[0, 5] == board[0, 9]) && (board[0,9] != ' '))// top row
-            {    
-                return false;
-                
-            }
-            else if (board[2, 1] == board[2, 5] && board[2, 5] == board[2, 9] && board[2, 9] != ' ') // middle row
+        {   
+            bool winner = true;
+            return winner switch
             {
-                
-                return false;
-                
-            }
-            else if (board[4, 1] == board[4, 5] && board[4, 9] == board[4, 5] && board[4, 5] != ' ') // bottom row
-            {
-                
-                return false;
-            }
-            else if (board[0, 1] == board[2, 1] && board[2, 1] == board[4, 1] && board[4, 1] != ' ') // left column
-            {
-                
-                return false;
-            }
-            else if (board[0, 5] == board[2, 5] && board[2, 5] == board[4, 5] && board[4, 5] != ' ') // middle column
-            {
-                
-                return false;
-            }
-            else if (board[0, 9] == board[2, 9] && board[2, 9] == board[4, 9] && board[4, 9] != ' ') // right column
-            {
-            return false;
-            }
-            else if (board[0, 1] == board[2, 5] && board[2, 5] == board[4, 9] && board[4, 9] != ' ') // top left to bottom right
-            {
-                return false;
-            }
-            else if (board[0, 9] == board[2, 5] && board[2, 5] == board[4, 1] && board[4, 1] != ' ') // top right to bottom left
-            {
-                return false;
-                
-            }
-            else
-            {    
-                return true; // no winner
-            }
+                var letter when board[0, 1] == board[0, 5] && board[0, 5] == board[0, 9] && board[0, 9] != ' ' => winner = false,
+                var letter when board[2, 1] == board[2, 5] && board[2, 5] == board[2, 9] && board[2, 9] != ' ' => winner = false,
+                var letter when board[4, 1] == board[4, 5] && board[4, 9] == board[4, 5] && board[4, 5] != ' ' => winner = false,
+                var letter when board[0, 1] == board[2, 1] && board[2, 1] == board[4, 1] && board[4, 1] != ' ' => winner = false,
+                var letter when board[0, 5] == board[2, 5] && board[2, 5] == board[4, 5] && board[4, 5] != ' ' => winner = false,
+                var letter when board[0, 9] == board[2, 9] && board[2, 9] == board[4, 9] && board[4, 9] != ' ' => winner = false,
+                var letter when board[0, 1] == board[2, 5] && board[2, 5] == board[4, 9] && board[4, 9] != ' ' => winner = false,
+                var letter when board[0, 9] == board[2, 5] && board[2, 5] == board[4, 1] && board[4, 1] != ' ' => winner = false,
+                _ => winner,
+            };
+            
         }
         #endregion
 
@@ -318,6 +254,60 @@ public class TicTacToe
             }
 
             return false;
+        }
+        #endregion
+
+        #region InvalidChoicePlayer1 InvalidChoicePlayer2 IsValidChoice method
+        /// <summary>
+        /// logic for choices outside of the range of 1-9
+        /// </summary>
+        /// <param name="player1Choice"></param>
+        /// <param name="board"></param>
+        public static void InvalidChoicePlayer1(int player1Choice, char[,] board)
+        {
+            WriteLine("Invalid Choice");
+            WriteLine("Player 1 enter a number between 1 and 9: ");
+            player1Choice = Convert.ToInt32(ReadLine());
+            if (IsValidChoice(player1Choice))
+            {
+                UpdateBoardPlayer1(player1Choice, board);
+            }
+            else
+            {
+                InvalidChoicePlayer1(player1Choice, board);
+            }
+        }
+        /// <summary>
+        /// logic for choices outside of the range of 1-9
+        /// </summary>
+        /// <param name="player2Choice"></param>
+        /// <param name="board"></param>
+        public static void InvalidChoicePlayer2(int player2Choice, char[,] board)
+        {
+            WriteLine("Invalid Choice");
+            WriteLine("Player 2 enter a number between 1 and 9: ");
+            player2Choice = Convert.ToInt32(ReadLine());
+            if (IsValidChoice(player2Choice))
+            {
+                UpdateBoardPlayer2(player2Choice, board);
+            }
+            else
+            {
+                InvalidChoicePlayer2(player2Choice, board);
+            }
+        }
+        /// <summary>
+        /// checks to see if the choice is within the range of 1-9
+        /// </summary>
+        /// <param name="playerChoice"></param>
+        /// <returns></returns>
+        public static bool IsValidChoice(int playerChoice)
+        {
+            if (playerChoice < 1 || playerChoice > 9)
+            {
+                return false;
+            }
+            return true;
         }
         #endregion
 }

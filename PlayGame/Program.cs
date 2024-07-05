@@ -1,4 +1,4 @@
-﻿using  PlayGame;
+﻿using  TicTacToeGame;
 
 /*
     Make a playable TicTacToe game with game board
@@ -24,10 +24,7 @@ WriteLine("Enter a name for player 2: ");
 string? player2 = ReadLine()!;
 
 // create board
-char[,] board = PlayGame.TicTacToe.CreateBoard();
-
-// create the game
-PlayGame.TicTacToe game = new PlayGame.TicTacToe(player1, player2, board);
+char[,] board = TicTacToe.CreateBoard();
 
 // play the game
-PlayGame.TicTacToe.PlayGame(player1, player2, board);
+TicTacToe.PlayGame(player1, player2, board);
