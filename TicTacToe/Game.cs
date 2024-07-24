@@ -166,8 +166,8 @@ public class TicTacToe
         public static void UpdateBoardPlayer1(int player1Choice, char[,] board)
         {
             char x = 'X';
-            #pragma warning disable CS8846 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-            char update = board switch
+            
+            var update = board switch
             {
                 var letter when player1Choice == 1 && board[0, 1] == ' ' => board[0, 1] = x,
                 var letter when player1Choice == 2 && board[0, 5] == ' ' => board[0, 5] = x,
@@ -193,8 +193,7 @@ public class TicTacToe
         public static void UpdateBoardPlayer2(int player2Choice, char[,] board)
         {
             char o = 'O';
-            #pragma warning disable CS8846 // The switch expression does not handle all possible values of its input type (it is not exhaustive).
-            char update = board switch
+            var update = board switch
             {
                 var letter when player2Choice == 1 && board[0, 1] == ' ' => board[0, 1] = o,
                 var letter when player2Choice == 2 && board[0, 5] == ' ' => board[0, 5] = o,
