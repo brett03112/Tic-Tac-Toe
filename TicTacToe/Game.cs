@@ -119,7 +119,7 @@ public class TicTacToe
                     WriteLine("It's a tie!");
                     break;
                 }
-                noWinner = checkWinner(board);
+                noWinner = CheckWinner(board);
 
                 if (noWinner == false)
                 {
@@ -145,7 +145,7 @@ public class TicTacToe
                     WriteLine("It's a tie!");
                     break;
                 }
-                noWinner = checkWinner(board);
+                noWinner = CheckWinner(board);
                 if (noWinner == false)
                 {
                     winner = player2;
@@ -217,7 +217,7 @@ public class TicTacToe
         /// </summary>
         /// <param name="board">The Tic-Tac-Toe board represented as a 2D character array.</param>
         /// <returns>True if there is a winner, false otherwise.</returns>
-        public static bool checkWinner(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
+        public static bool CheckWinner(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
         {   
             bool winner = true;
             return winner switch
