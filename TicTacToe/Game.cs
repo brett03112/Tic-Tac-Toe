@@ -101,15 +101,27 @@ public class TicTacToe
             bool tie = false;
             while (noWinner)
             {
-                WriteLine("Player 1 enter a number between 1 and 9: ");
-                player1Choice = Convert.ToInt32(ReadLine());
-                if (IsValidChoice(player1Choice))
+                bool validMove = false;
+                while (!validMove)
                 {
-                    UpdateBoardPlayer1(player1Choice, board);
-                }
-                else
-                {
-                    InvalidChoicePlayer1(player1Choice, board);
+                    WriteLine("Player 1 enter a number between 1 and 9: ");
+                    player1Choice = Convert.ToInt32(ReadLine());
+                    if (IsValidChoice(player1Choice))
+                    {
+                        try
+                        {
+                            UpdateBoardPlayer1(player1Choice, board);
+                            validMove = true;
+                        }
+                        catch (ArgumentException)
+                        {
+                            WriteLine("That space is already taken. Please choose another.");
+                        }
+                    }
+                    else
+                    {
+                        WriteLine("Invalid choice. Please enter a number between 1 and 9.");
+                    }
                 }
                 
                 DisplayBoard(board);
@@ -124,23 +136,35 @@ public class TicTacToe
                 if (noWinner == false)
                 {
                     winner = player1;
-                    WriteLine("Player 1 wins !");
+                    WriteLine("Player 1 wins!");
                     break;
                 }
                 
-                WriteLine("Player 2 enter a number between 1 and 9: ");
-                player2Choice = Convert.ToInt32(ReadLine());
-                if (IsValidChoice(player2Choice))
+                validMove = false;
+                while (!validMove)
                 {
-                    UpdateBoardPlayer2(player2Choice, board);
-                }
-                else
-                {
-                    InvalidChoicePlayer2(player2Choice, board);
+                    WriteLine("Player 2 enter a number between 1 and 9: ");
+                    player2Choice = Convert.ToInt32(ReadLine());
+                    if (IsValidChoice(player2Choice))
+                    {
+                        try
+                        {
+                            UpdateBoardPlayer2(player2Choice, board);
+                            validMove = true;
+                        }
+                        catch (ArgumentException)
+                        {
+                            WriteLine("That space is already taken. Please choose another.");
+                        }
+                    }
+                    else
+                    {
+                        WriteLine("Invalid choice. Please enter a number between 1 and 9.");
+                    }
                 }
                 DisplayBoard(board);
                 tie = CheckTie(board);
-                if (tie == true)
+                if (tie)
                 {
                     WriteLine("It's a tie!");
                     break;
@@ -149,7 +173,7 @@ public class TicTacToe
                 if (noWinner == false)
                 {
                     winner = player2;
-                    WriteLine("Player 2 wins !");
+                    WriteLine("Player 2 wins!");
                     break;
                 }
                 
