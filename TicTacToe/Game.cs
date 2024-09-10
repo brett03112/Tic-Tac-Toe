@@ -91,7 +91,7 @@ public class TicTacToe
         /// <param name="player1">The name of player 1.</param>
         /// <param name="player2">The name of player 2.</param>
         /// <param name="board">The game board.</param>
-        public static void PlayGame(string player, char[,] board)
+        public static void PlayGame(string player, string player2, char[,] board)
         {
             string winner = " ";
             int playerChoice = 0;
@@ -286,7 +286,7 @@ public class TicTacToe
             player1Choice = Convert.ToInt32(ReadLine());
             if (IsValidChoice(player1Choice))
             {
-                UpdateBoardPlayer1(player1Choice, board);
+                UpdateBoardPlayer(player1Choice, board);
             }
             else
             {
