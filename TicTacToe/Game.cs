@@ -9,17 +9,26 @@
 */
 #region TicTacToe Class
 
+public enum AIDifficulty
+{
+    Easy,
+    Medium,
+    Hard
+}
+
 public class TicTacToe
 {
-        string Player { get; } = "Player";
+        string Player { get; }
         string Computer { get; } = "Computer";
-        string Winner { get; } = " ";
-        char[,] Board { get; } = CreateBoard();
+        string Winner { get; set; } = " ";
+        char[,] Board { get; }
+        AIDifficulty Difficulty { get; }
 
-        public TicTacToe(string player, char[,] board)
+        public TicTacToe(string player, char[,] board, AIDifficulty difficulty)
         {
             Player = player;
             Board = board;
+            Difficulty = difficulty;
         }
         
         
@@ -91,26 +100,23 @@ public class TicTacToe
         /// <param name="player1">The name of player 1.</param>
         /// <param name="player2">The name of player 2.</param>
         /// <param name="board">The game board.</param>
-        public static void PlayGame(string player, string player2, char[,] board)
+        public void PlayGame()
         {
-            string winner = " ";
             int playerChoice = 0;
             bool noWinner = true;
             bool tie = false;
-            Random random = new Random();
 
             while (noWinner)
             {
                 bool validMove = false;
                 while (!validMove)
                 {
-                    WriteLine("Player enter a number between 1 and 9: ");
-                    playerChoice = Convert.ToInt32(ReadLine());
-                    if (IsValidChoice(playerChoice))
+                    WriteLine($"{Player} enter a number between 1 and 9: ");
+                    if (int.TryParse(ReadLine(), out playerChoice) && IsValidChoice(playerChoice))
                     {
                         try
                         {
-                            UpdateBoardPlayer(playerChoice, board);
+                            UpdateBoardPlayer(playerChoice, Board);
                             validMove = true;
                         }
                         catch (ArgumentException)
@@ -124,19 +130,19 @@ public class TicTacToe
                     }
                 }
                 
-                DisplayBoard(board);
-                tie = CheckTie(board);
+                DisplayBoard(Board);
+                tie = CheckTie(Board);
                 if (tie)
                 {
                     WriteLine("It's a tie!");
                     break;
                 }
-                noWinner = CheckWinner(board);
+                noWinner = CheckWinner(Board);
 
                 if (noWinner == false)
                 {
-                    winner = player;
-                    WriteLine("Player wins!");
+                    Winner = Player;
+                    WriteLine($"{Player} wins!");
                     break;
                 }
                 
@@ -144,39 +150,156 @@ public class TicTacToe
                 WriteLine("Computer is making a move...");
                 Thread.Sleep(1000); // Add a small delay to simulate thinking
 
-                validMove = false;
-                while (!validMove)
-                {
-                    int computerChoice = random.Next(1, 10); // Generate a random number between 1 and 9
-                    if (IsValidChoice(computerChoice))
-                    {
-                        try
-                        {
-                            UpdateBoardComputer(computerChoice, board);
-                            validMove = true;
-                        }
-                        catch (ArgumentException)
-                        {
-                            // Space is taken, computer will try again
-                        }
-                    }
-                }
+                int computerChoice = MakeComputerMove();
+                UpdateBoardComputer(computerChoice, Board);
 
-                DisplayBoard(board);
-                tie = CheckTie(board);
+                DisplayBoard(Board);
+                tie = CheckTie(Board);
                 if (tie)
                 {
                     WriteLine("It's a tie!");
                     break;
                 }
-                noWinner = CheckWinner(board);
+                noWinner = CheckWinner(Board);
                 if (noWinner == false)
                 {
-                    winner = "Computer";
+                    Winner = Computer;
                     WriteLine("Computer wins!");
                     break;
                 }
             }
+        }
+
+        private int MakeComputerMove()
+        {
+            return Difficulty switch
+            {
+                AIDifficulty.Easy => MakeEasyMove(),
+                AIDifficulty.Medium => MakeMediumMove(),
+                AIDifficulty.Hard => MakeHardMove(),
+                _ => throw new ArgumentException("Invalid difficulty level"),
+            };
+        }
+
+        private int MakeEasyMove()
+        {
+            Random random = new Random();
+            int choice;
+            do
+            {
+                choice = random.Next(1, 10);
+            } while (!IsValidMove(choice));
+            return choice;
+        }
+
+        private int MakeMediumMove()
+        {
+            // First, check if we can win
+            for (int i = 1; i <= 9; i++)
+            {
+                if (IsValidMove(i))
+                {
+                    char[,] tempBoard = (char[,])Board.Clone();
+                    UpdateBoardComputer(i, tempBoard);
+                    if (!CheckWinner(tempBoard))
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            // Then, block the player from winning
+            for (int i = 1; i <= 9; i++)
+            {
+                if (IsValidMove(i))
+                {
+                    char[,] tempBoard = (char[,])Board.Clone();
+                    UpdateBoardPlayer(i, tempBoard);
+                    if (!CheckWinner(tempBoard))
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            // If no winning or blocking move, make a random move
+            return MakeEasyMove();
+        }
+
+        private int MakeHardMove()
+        {
+            // Implement minimax algorithm for unbeatable AI
+            int bestScore = int.MinValue;
+            int bestMove = 0;
+
+            for (int i = 1; i <= 9; i++)
+            {
+                if (IsValidMove(i))
+                {
+                    char[,] tempBoard = (char[,])Board.Clone();
+                    UpdateBoardComputer(i, tempBoard);
+                    int score = Minimax(tempBoard, 0, false);
+                    if (score > bestScore)
+                    {
+                        bestScore = score;
+                        bestMove = i;
+                    }
+                }
+            }
+
+            return bestMove;
+        }
+
+        private int Minimax(char[,] board, int depth, bool isMaximizing)
+        {
+            if (!CheckWinner(board))
+            {
+                return isMaximizing ? -1 : 1;
+            }
+
+            if (CheckTie(board))
+            {
+                return 0;
+            }
+
+            if (isMaximizing)
+            {
+                int bestScore = int.MinValue;
+                for (int i = 1; i <= 9; i++)
+                {
+                    if (IsValidMove(i, board))
+                    {
+                        char[,] tempBoard = (char[,])board.Clone();
+                        UpdateBoardComputer(i, tempBoard);
+                        int score = Minimax(tempBoard, depth + 1, false);
+                        bestScore = Math.Max(score, bestScore);
+                    }
+                }
+                return bestScore;
+            }
+            else
+            {
+                int bestScore = int.MaxValue;
+                for (int i = 1; i <= 9; i++)
+                {
+                    if (IsValidMove(i, board))
+                    {
+                        char[,] tempBoard = (char[,])board.Clone();
+                        UpdateBoardPlayer(i, tempBoard);
+                        int score = Minimax(tempBoard, depth + 1, true);
+                        bestScore = Math.Min(score, bestScore);
+                    }
+                }
+                return bestScore;
+            }
+        }
+
+        private bool IsValidMove(int choice, char[,] board = null)
+        {
+            board = board ?? Board;
+            int row = (choice - 1) / 3 * 2;
+            int col = ((choice - 1) % 3) * 4 + 1;
+            return board[row, col] == ' ';
         }
         #endregion
 
@@ -186,23 +309,20 @@ public class TicTacToe
         /// </summary>
         /// <param name="player1Choice">The choice made by player 1 (1-9).</param>
         /// <param name="board">The Tic-Tac-Toe board.</param>
-        public static void UpdateBoardPlayer(int playerChoice, char[,] board)
+        private void UpdateBoardPlayer(int playerChoice, char[,] board)
         {
-            char x = 'X';
-            
-            var update = board switch
+            const char x = 'X';
+            int row = (playerChoice - 1) / 3 * 2;
+            int col = ((playerChoice - 1) % 3) * 4 + 1;
+
+            if (board[row, col] == ' ')
             {
-                var letter when playerChoice == 1 && board[0, 1] == ' ' => board[0, 1] = x,
-                var letter when playerChoice == 2 && board[0, 5] == ' ' => board[0, 5] = x,
-                var letter when playerChoice == 3 && board[0, 9] == ' ' => board[0, 9] = x,
-                var letter when playerChoice == 4 && board[2, 1] == ' ' => board[2, 1] = x,
-                var letter when playerChoice == 5 && board[2, 5] == ' ' => board[2, 5] = x,
-                var letter when playerChoice == 6 && board[2, 9] == ' ' => board[2, 9] = x,
-                var letter when playerChoice == 7 && board[4, 1] == ' ' => board[4, 1] = x,
-                var letter when playerChoice == 8 && board[4, 5] == ' ' => board[4, 5] = x,
-                var letter when playerChoice == 9 && board[4, 9] == ' ' => board[4, 9] = x,
-                _ => throw new ArgumentException("Invalid choice. Space is already taken.", nameof(playerChoice)),
-            };
+                board[row, col] = x;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid choice. Space is already taken.", nameof(playerChoice));
+            }
         }
         #endregion
 
@@ -212,22 +332,20 @@ public class TicTacToe
         /// </summary>
         /// <param name="computerChoice">The choice made by the computer (1-9).</param>
         /// <param name="board">The Tic-Tac-Toe board.</param>
-        public static void UpdateBoardComputer(int computerChoice, char[,] board)
+        private void UpdateBoardComputer(int computerChoice, char[,] board)
         {
-            char o = 'O';
-            var update = board switch
+            const char o = 'O';
+            int row = (computerChoice - 1) / 3 * 2;
+            int col = ((computerChoice - 1) % 3) * 4 + 1;
+
+            if (board[row, col] == ' ')
             {
-                var letter when computerChoice == 1 && board[0, 1] == ' ' => board[0, 1] = o,
-                var letter when computerChoice == 2 && board[0, 5] == ' ' => board[0, 5] = o,
-                var letter when computerChoice == 3 && board[0, 9] == ' ' => board[0, 9] = o,
-                var letter when computerChoice == 4 && board[2, 1] == ' ' => board[2, 1] = o,
-                var letter when computerChoice == 5 && board[2, 5] == ' ' => board[2, 5] = o,
-                var letter when computerChoice == 6 && board[2, 9] == ' ' => board[2, 9] = o,
-                var letter when computerChoice == 7 && board[4, 1] == ' ' => board[4, 1] = o,
-                var letter when computerChoice == 8 && board[4, 5] == ' ' => board[4, 5] = o,
-                var letter when computerChoice == 9 && board[4, 9] == ' ' => board[4, 9] = o,
-                _ => throw new ArgumentException("Invalid choice. Space is already taken.", nameof(computerChoice)),
-            };
+                board[row, col] = o;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid choice. Space is already taken.", nameof(computerChoice));
+            }
         }
         #endregion
 
