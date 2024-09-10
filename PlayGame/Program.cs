@@ -20,11 +20,13 @@ WriteLine("   |   |   ");
 // get player names
 WriteLine("Enter a name for player 1: ");
 string? player1 = ReadLine()!;
-WriteLine("Enter a name for player 2: ");
-string? player2 = ReadLine()!;
+string player2 = "Computer";
+
 
 // create board
 char[,] board = TicTacToe.CreateBoard();
 
 // play the game
-TicTacToe.PlayGame(player1, player2, board);
+TicTacToe newGame = new TicTacToe(player1, board, AIDifficulty.Easy); 
+
+newGame.PlayGame(player2);

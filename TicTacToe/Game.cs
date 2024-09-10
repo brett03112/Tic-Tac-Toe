@@ -100,7 +100,7 @@ public class TicTacToe
         /// <param name="player1">The name of player 1.</param>
         /// <param name="player2">The name of player 2.</param>
         /// <param name="board">The game board.</param>
-        public void PlayGame()
+        public void PlayGame(string player1)
         {
             int playerChoice = 0;
             bool noWinner = true;
@@ -294,7 +294,7 @@ public class TicTacToe
             }
         }
 
-        private bool IsValidMove(int choice, char[,] board = null)
+        private bool IsValidMove(int choice, char[,] board = null!)
         {
             board = board ?? Board;
             int row = (choice - 1) / 3 * 2;
@@ -355,7 +355,7 @@ public class TicTacToe
         /// </summary>
         /// <param name="board">The Tic-Tac-Toe board represented as a 2D character array.</param>
         /// <returns>True if there is a winner, false otherwise.</returns>
-        public static bool CheckWinner(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
+        public bool CheckWinner(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
         {   
             bool winner = true;
             return winner switch
@@ -380,7 +380,7 @@ public class TicTacToe
         /// </summary>
         /// <param name="board">The game board represented as a 2D char array.</param>
         /// <returns>True if the board is full, false otherwise.</returns>
-        public static bool CheckTie(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
+        public bool CheckTie(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
         {
             if (board[0,1] != ' ' && board[0,5] != ' ' && board[0,9] != ' ' && board[2,1] != ' ' && board[2,5] != ' ' && board[2,9] != ' ' && board[4,1] != ' ' && board[4,5] != ' ' && board[4,9] != ' ')
             {
@@ -397,7 +397,7 @@ public class TicTacToe
         /// </summary>
         /// <param name="player1Choice"></param>
         /// <param name="board"></param>
-        public static void InvalidChoicePlayer1(int player1Choice, char[,] board)
+        public void InvalidChoicePlayer1(int player1Choice, char[,] board)
         {
             WriteLine("Invalid Choice");
             WriteLine("Player 1 enter a number between 1 and 9: ");
@@ -421,7 +421,7 @@ public class TicTacToe
         /// </summary>
         /// <param name="playerChoice"></param>
         /// <returns></returns>
-        public static bool IsValidChoice(int playerChoice)
+        public bool IsValidChoice(int playerChoice)
         {
             if (playerChoice < 1 || playerChoice > 9)
             {
