@@ -11,15 +11,14 @@
 
 public class TicTacToe
 {
-        string Player1 { get; } = "Player_1";
-        string Player2 { get;} = "Player_2";
-        string Winner {get; } = " ";
+        string Player { get; } = "Player";
+        string Computer { get; } = "Computer";
+        string Winner { get; } = " ";
         char[,] Board { get; } = CreateBoard();
 
-        public TicTacToe(string player1, string player2, char[,] board)
+        public TicTacToe(string player, char[,] board)
         {
-            Player1 = player1;
-            Player2 = player2;
+            Player = player;
             Board = board;
         }
         
@@ -92,25 +91,26 @@ public class TicTacToe
         /// <param name="player1">The name of player 1.</param>
         /// <param name="player2">The name of player 2.</param>
         /// <param name="board">The game board.</param>
-        public static void PlayGame(string player1, string player2, char[,] board)
+        public static void PlayGame(string player, char[,] board)
         {
             string winner = " ";
-            int player1Choice = 0;
-            int player2Choice = 0;
+            int playerChoice = 0;
             bool noWinner = true;
             bool tie = false;
+            Random random = new Random();
+
             while (noWinner)
             {
                 bool validMove = false;
                 while (!validMove)
                 {
-                    WriteLine("Player 1 enter a number between 1 and 9: ");
-                    player1Choice = Convert.ToInt32(ReadLine());
-                    if (IsValidChoice(player1Choice))
+                    WriteLine("Player enter a number between 1 and 9: ");
+                    playerChoice = Convert.ToInt32(ReadLine());
+                    if (IsValidChoice(playerChoice))
                     {
                         try
                         {
-                            UpdateBoardPlayer1(player1Choice, board);
+                            UpdateBoardPlayer(playerChoice, board);
                             validMove = true;
                         }
                         catch (ArgumentException)
@@ -135,33 +135,33 @@ public class TicTacToe
 
                 if (noWinner == false)
                 {
-                    winner = player1;
-                    WriteLine("Player 1 wins!");
+                    winner = player;
+                    WriteLine("Player wins!");
                     break;
                 }
                 
+                // Computer's turn
+                WriteLine("Computer is making a move...");
+                Thread.Sleep(1000); // Add a small delay to simulate thinking
+
                 validMove = false;
                 while (!validMove)
                 {
-                    WriteLine("Player 2 enter a number between 1 and 9: ");
-                    player2Choice = Convert.ToInt32(ReadLine());
-                    if (IsValidChoice(player2Choice))
+                    int computerChoice = random.Next(1, 10); // Generate a random number between 1 and 9
+                    if (IsValidChoice(computerChoice))
                     {
                         try
                         {
-                            UpdateBoardPlayer2(player2Choice, board);
+                            UpdateBoardComputer(computerChoice, board);
                             validMove = true;
                         }
                         catch (ArgumentException)
                         {
-                            WriteLine("That space is already taken. Please choose another.");
+                            // Space is taken, computer will try again
                         }
                     }
-                    else
-                    {
-                        WriteLine("Invalid choice. Please enter a number between 1 and 9.");
-                    }
                 }
+
                 DisplayBoard(board);
                 tie = CheckTie(board);
                 if (tie)
@@ -172,11 +172,10 @@ public class TicTacToe
                 noWinner = CheckWinner(board);
                 if (noWinner == false)
                 {
-                    winner = player2;
-                    WriteLine("Player 2 wins!");
+                    winner = "Computer";
+                    WriteLine("Computer wins!");
                     break;
                 }
-                
             }
         }
         #endregion
@@ -187,51 +186,48 @@ public class TicTacToe
         /// </summary>
         /// <param name="player1Choice">The choice made by player 1 (1-9).</param>
         /// <param name="board">The Tic-Tac-Toe board.</param>
-        public static void UpdateBoardPlayer1(int player1Choice, char[,] board)
+        public static void UpdateBoardPlayer(int playerChoice, char[,] board)
         {
             char x = 'X';
             
             var update = board switch
             {
-                var letter when player1Choice == 1 && board[0, 1] == ' ' => board[0, 1] = x,
-                var letter when player1Choice == 2 && board[0, 5] == ' ' => board[0, 5] = x,
-                var letter when player1Choice == 3 && board[0, 9] == ' ' => board[0, 9] = x,
-                var letter when player1Choice == 4 && board[2, 1] == ' ' => board[2, 1] = x,
-                var letter when player1Choice == 5 && board[2, 5] == ' ' => board[2, 5] = x,
-                var letter when player1Choice == 6 && board[2, 9] == ' ' => board[2, 9] = x,
-                var letter when player1Choice == 7 && board[4, 1] == ' ' => board[4, 1] = x,
-                var letter when player1Choice == 8 && board[4, 5] == ' ' => board[4, 5] = x,
-                var letter when player1Choice == 9 && board[4, 9] == ' ' => board[4, 9] = x,
-                _ => throw new ArgumentException("Invalid choice. Space is already taken.", nameof(player1Choice)),
+                var letter when playerChoice == 1 && board[0, 1] == ' ' => board[0, 1] = x,
+                var letter when playerChoice == 2 && board[0, 5] == ' ' => board[0, 5] = x,
+                var letter when playerChoice == 3 && board[0, 9] == ' ' => board[0, 9] = x,
+                var letter when playerChoice == 4 && board[2, 1] == ' ' => board[2, 1] = x,
+                var letter when playerChoice == 5 && board[2, 5] == ' ' => board[2, 5] = x,
+                var letter when playerChoice == 6 && board[2, 9] == ' ' => board[2, 9] = x,
+                var letter when playerChoice == 7 && board[4, 1] == ' ' => board[4, 1] = x,
+                var letter when playerChoice == 8 && board[4, 5] == ' ' => board[4, 5] = x,
+                var letter when playerChoice == 9 && board[4, 9] == ' ' => board[4, 9] = x,
+                _ => throw new ArgumentException("Invalid choice. Space is already taken.", nameof(playerChoice)),
             };
-       
         }
         #endregion
 
-        #region UpdateBoardPlayer2 method
+        #region UpdateBoardComputer method
         /// <summary>
-        /// Updates the Tic-Tac-Toe board with the player 2's choice.
+        /// Updates the Tic-Tac-Toe board with the computer's choice.
         /// </summary>
-        /// <param name="player2Choice">The choice made by player 2 (1-9).</param>
+        /// <param name="computerChoice">The choice made by the computer (1-9).</param>
         /// <param name="board">The Tic-Tac-Toe board.</param>
-        public static void UpdateBoardPlayer2(int player2Choice, char[,] board)
+        public static void UpdateBoardComputer(int computerChoice, char[,] board)
         {
             char o = 'O';
             var update = board switch
             {
-                var letter when player2Choice == 1 && board[0, 1] == ' ' => board[0, 1] = o,
-                var letter when player2Choice == 2 && board[0, 5] == ' ' => board[0, 5] = o,
-                var letter when player2Choice == 3 && board[0, 9] == ' ' => board[0, 9] = o,
-                var letter when player2Choice == 4 && board[2, 1] == ' ' => board[2, 1] = o,
-                var letter when player2Choice == 5 && board[2, 5] == ' ' => board[2, 5] = o,
-                var letter when player2Choice == 6 && board[2, 9] == ' ' => board[2, 9] = o,
-                var letter when player2Choice == 7 && board[4, 1] == ' ' => board[4, 1] = o,
-                var letter when player2Choice == 8 && board[4, 5] == ' ' => board[4, 5] = o,
-                var letter when player2Choice == 9 && board[4, 9] == ' ' => board[4, 9] = o,
-                _ => throw new ArgumentException("Invalid choice. Space is already taken.", nameof(player2Choice)),
+                var letter when computerChoice == 1 && board[0, 1] == ' ' => board[0, 1] = o,
+                var letter when computerChoice == 2 && board[0, 5] == ' ' => board[0, 5] = o,
+                var letter when computerChoice == 3 && board[0, 9] == ' ' => board[0, 9] = o,
+                var letter when computerChoice == 4 && board[2, 1] == ' ' => board[2, 1] = o,
+                var letter when computerChoice == 5 && board[2, 5] == ' ' => board[2, 5] = o,
+                var letter when computerChoice == 6 && board[2, 9] == ' ' => board[2, 9] = o,
+                var letter when computerChoice == 7 && board[4, 1] == ' ' => board[4, 1] = o,
+                var letter when computerChoice == 8 && board[4, 5] == ' ' => board[4, 5] = o,
+                var letter when computerChoice == 9 && board[4, 9] == ' ' => board[4, 9] = o,
+                _ => throw new ArgumentException("Invalid choice. Space is already taken.", nameof(computerChoice)),
             };
-            
-                                 
         }
         #endregion
 
@@ -302,20 +298,6 @@ public class TicTacToe
         /// </summary>
         /// <param name="player2Choice"></param>
         /// <param name="board"></param>
-        public static void InvalidChoicePlayer2(int player2Choice, char[,] board)
-        {
-            WriteLine("Invalid Choice");
-            WriteLine("Player 2 enter a number between 1 and 9: ");
-            player2Choice = Convert.ToInt32(ReadLine());
-            if (IsValidChoice(player2Choice))
-            {
-                UpdateBoardPlayer2(player2Choice, board);
-            }
-            else
-            {
-                InvalidChoicePlayer2(player2Choice, board);
-            }
-        }
         /// <summary>
         /// checks to see if the choice is within the range of 1-9
         /// </summary>
