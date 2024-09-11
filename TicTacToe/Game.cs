@@ -13,7 +13,8 @@ public enum AIDifficulty
 {
     Easy,
     Medium,
-    Hard
+    Hard,
+    None
 }
 
 public class TicTacToe
@@ -22,7 +23,7 @@ public class TicTacToe
         string Computer { get; } = "Computer";
         string Winner { get; set; } = " ";
         char[,] Board { get; }
-        AIDifficulty Difficulty { get; }
+        AIDifficulty Difficulty { get; } = AIDifficulty.Easy;
 
         public TicTacToe(string player, char[,] board, AIDifficulty difficulty)
         {
@@ -177,6 +178,7 @@ public class TicTacToe
                 AIDifficulty.Easy => MakeEasyMove(),
                 AIDifficulty.Medium => MakeMediumMove(),
                 AIDifficulty.Hard => MakeHardMove(),
+                AIDifficulty.None => MakeEasyMove(),
                 _ => throw new ArgumentException("Invalid difficulty level"),
             };
         }
@@ -428,6 +430,82 @@ public class TicTacToe
                 return false;
             }
             return true;
+        }
+        #endregion
+
+        #region StartMenu method
+        public static void StartMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                WriteLine("Welcome to Tic-Tac-Toe!");
+                WriteLine("1. Start New Game");
+                WriteLine("2. How to Play");
+                WriteLine("3. Exit");
+                WriteLine("\nPlease enter your choice (1-3):");
+
+                string? choice = ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        StartNewGame();
+                        break;
+                    case "2":
+                        DisplayHowToPlay();
+                        break;
+                    case "3":
+                        WriteLine("Thank you for playing. Goodbye!");
+                        return;
+                    default:
+                        WriteLine("Invalid choice. Press any key to try again.");
+                        ReadKey();
+                        break;
+                }
+            }
+        }
+
+        private static void StartNewGame()
+        {
+            Console.Clear();
+            WriteLine("Enter your name:");
+            string? playerName = ReadLine();
+
+            WriteLine("Select AI difficulty:");
+            WriteLine("1. Easy");
+            WriteLine("2. Medium");
+            WriteLine("3. Hard");
+            
+            AIDifficulty difficulty = AIDifficulty.Easy;
+            while (true)
+            {
+                string? difficultyChoice = ReadLine();
+                if (difficultyChoice == "1") { difficulty = AIDifficulty.Easy; break; }
+                if (difficultyChoice == "2") { difficulty = AIDifficulty.Medium; break; }
+                if (difficultyChoice == "3") { difficulty = AIDifficulty.Hard; break; }
+                WriteLine("Invalid choice. Please enter 1, 2, or 3.");
+            }
+
+            char[,] board = CreateBoard();
+            TicTacToe game = new TicTacToe(playerName!, board, difficulty);
+            game.PlayGame(playerName!);
+
+            WriteLine("Press any key to return to the main menu.");
+            ReadKey();
+        }
+
+        private static void DisplayHowToPlay()
+        {
+            Console.Clear();
+            WriteLine("How to Play Tic-Tac-Toe:");
+            WriteLine("1. The game is played on a 3x3 grid.");
+            WriteLine("2. You are X, the computer is O.");
+            WriteLine("3. Players take turns putting their marks in empty squares.");
+            WriteLine("4. The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.");
+            WriteLine("5. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.");
+            WriteLine("\nPress any key to return to the main menu.");
+            ReadKey();
         }
         #endregion
 }

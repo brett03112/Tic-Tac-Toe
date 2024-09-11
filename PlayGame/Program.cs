@@ -17,16 +17,12 @@ WriteLine("___|___|___");
 WriteLine(" 7 | 8 | 9 "); // [4,1] [4,5] [4,9]
 WriteLine("   |   |   ");
 
-// get player names
-WriteLine("Enter a name for player 1: ");
-string? player1 = ReadLine()!;
-string player2 = "Computer";
+TicTacToe.StartMenu();
 
 
-// create board
-char[,] board = TicTacToe.CreateBoard();
 
-// play the game
-TicTacToe newGame = new TicTacToe(player1, board, AIDifficulty.Easy); 
 
-newGame.PlayGame(player2);
+
+
+
+
