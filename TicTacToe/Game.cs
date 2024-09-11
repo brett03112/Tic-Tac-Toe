@@ -503,7 +503,13 @@ public class TicTacToe
             WriteLine("2. You are X, the computer is O.");
             WriteLine("3. Players take turns putting their marks in empty squares.");
             WriteLine("4. The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.");
-            WriteLine("5. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.");
+            WriteLine("5. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n");
+            WriteLine(" 1 | 2 | 3 "); // [0,1] [0,5] [0,9]
+            WriteLine("___|___|___");
+            WriteLine(" 4 | 5 | 6 "); // [2,1] [2,5] [2,9]
+            WriteLine("___|___|___");
+            WriteLine(" 7 | 8 | 9 "); // [4,1] [4,5] [4,9]
+            WriteLine("   |   |   ");
             WriteLine("\nPress any key to return to the main menu.");
             ReadKey();
         }
