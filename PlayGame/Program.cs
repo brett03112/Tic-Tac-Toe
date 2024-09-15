@@ -8,16 +8,4 @@
     Play the game
 */
 
-
-
-
-
 TicTacToe.StartMenu();
-
-
-
-
-
-
-
-

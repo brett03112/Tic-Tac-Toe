@@ -1,0 +1,7 @@
+C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\bin\Release\net8.0\publish\PlayGame.exe
+C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\bin\Release\net8.0\publish\PlayGame.dll
+C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\bin\Release\net8.0\publish\PlayGame.deps.json
+C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\bin\Release\net8.0\publish\PlayGame.runtimeconfig.json
+C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\bin\Release\net8.0\publish\PlayGame.pdb
+C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\bin\Release\net8.0\publish\TicTacToe.dll
+C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\bin\Release\net8.0\publish\TicTacToe.pdb

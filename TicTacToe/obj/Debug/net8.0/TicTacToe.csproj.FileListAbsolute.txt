@@ -21,3 +21,4 @@ C:\Users\brett\Documents\csharp\Tic-Tac-Toe\TicTacToe\obj\Debug\net8.0\TicTacToe
 C:\Users\brett\Documents\csharp\Tic-Tac-Toe\TicTacToe\obj\Debug\net8.0\refint\TicTacToe.dll
 C:\Users\brett\Documents\csharp\Tic-Tac-Toe\TicTacToe\obj\Debug\net8.0\TicTacToe.pdb
 C:\Users\brett\Documents\csharp\Tic-Tac-Toe\TicTacToe\obj\Debug\net8.0\ref\TicTacToe.dll
+C:\Users\brett\Documents\cSharp\TicTacToe\TicTacToe\obj\Debug\net8.0\TicTacToe.sourcelink.json
