@@ -1,0 +1,3 @@
+C:\Users\brett\Documents\cSharp\TicTacToe\TicTacToe\bin\Release\net8.0\publish\TicTacToe.dll
+C:\Users\brett\Documents\cSharp\TicTacToe\TicTacToe\bin\Release\net8.0\publish\TicTacToe.deps.json
+C:\Users\brett\Documents\cSharp\TicTacToe\TicTacToe\bin\Release\net8.0\publish\TicTacToe.pdb

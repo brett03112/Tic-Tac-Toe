@@ -35,3 +35,4 @@ C:\Users\brett\Documents\csharp\Tic-Tac-Toe\PlayGame\obj\Debug\net8.0\refint\Pla
 C:\Users\brett\Documents\csharp\Tic-Tac-Toe\PlayGame\obj\Debug\net8.0\PlayGame.pdb
 C:\Users\brett\Documents\csharp\Tic-Tac-Toe\PlayGame\obj\Debug\net8.0\PlayGame.genruntimeconfig.cache
 C:\Users\brett\Documents\csharp\Tic-Tac-Toe\PlayGame\obj\Debug\net8.0\ref\PlayGame.dll
+C:\Users\brett\Documents\cSharp\TicTacToe\PlayGame\obj\Debug\net8.0\PlayGame.sourcelink.json
