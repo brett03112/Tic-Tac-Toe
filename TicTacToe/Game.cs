@@ -1,4 +1,6 @@
-﻿namespace TicTacToeGame;
+﻿using System;
+
+namespace TicTacToeGame;
 
 /*
         Make a playable TicTacToe game with game board
@@ -74,7 +76,7 @@ public class TicTacToe
 
             return board;
         }
-    #endregion
+        #endregion
         
         #region DisplayBoard method
         /// <summary>
@@ -87,88 +89,136 @@ public class TicTacToe
             {
                 for (int j = 0; j < 11; j++)
                 {
-                    Write(board[i, j]);
+                    if (board[i, j] == 'X')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write(board[i, j]);
+                        Console.ResetColor();
+                    }
+                    else if (board[i, j] == 'O')
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write(board[i, j]);
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.Write(board[i, j]);
+                    }
                 }
-                WriteLine();
+                Console.WriteLine();
             }
+        }
+        #endregion
+
+        #region CoinFlip method
+        /// <summary>
+        /// Simulates a coin flip and returns true if the player wins the toss, false otherwise.
+        /// </summary>
+        /// <returns>True if the player wins the toss, false if the computer wins.</returns>
+        private bool CoinFlip()
+        {
+            WriteLineWithColor($"{Player}, choose Heads or Tails: ", ConsoleColor.Cyan);
+            string? choice = Console.ReadLine()?.ToLower();
+            while (choice != "heads" && choice != "tails")
+            {
+                WriteLineWithColor("Invalid choice. Please enter Heads or Tails: ", ConsoleColor.Red);
+                choice = Console.ReadLine()?.ToLower();
+            }
+
+            Random random = new Random();
+            bool isHeads = random.Next(2) == 0;
+            string result = isHeads ? "Heads" : "Tails";
+
+            WriteLineWithColor($"The coin flip result is: {result}", ConsoleColor.Yellow);
+
+            return (choice == "heads" && isHeads) || (choice == "tails" && !isHeads);
         }
         #endregion
 
         #region PlayGame method
         /// <summary>
-        /// Plays a game of Tic Tac Toe between two players.
+        /// Plays a game of Tic Tac Toe between the player and the computer.
         /// </summary>
-        /// <param name="player1">The name of player 1.</param>
-        /// <param name="player2">The name of player 2.</param>
-        /// <param name="board">The game board.</param>
+        /// <param name="player1">The name of the player.</param>
         public void PlayGame(string player1)
         {
-            int playerChoice = 0;
-            bool noWinner = true;
+            bool playerTurn = CoinFlip();
+            if (playerTurn)
+            {
+                WriteLineWithColor($"{Player} won the toss! You go first.", ConsoleColor.Green);
+            }
+            else
+            {
+                WriteLineWithColor("Computer won the toss! Computer goes first.", ConsoleColor.Yellow);
+            }
+
+            bool gameOver = false;
             bool tie = false;
 
-            while (noWinner)
+            while (!gameOver)
             {
-                bool validMove = false;
-                while (!validMove)
+                if (playerTurn)
                 {
-                    WriteLine($"{Player} enter a number between 1 and 9: ");
-                    if (int.TryParse(ReadLine(), out playerChoice) && IsValidChoice(playerChoice))
-                    {
-                        try
-                        {
-                            UpdateBoardPlayer(playerChoice, Board);
-                            validMove = true;
-                        }
-                        catch (ArgumentException)
-                        {
-                            WriteLine("That space is already taken. Please choose another.");
-                        }
-                    }
-                    else
-                    {
-                        WriteLine("Invalid choice. Please enter a number between 1 and 9.");
-                    }
+                    PlayerMove();
                 }
-                
+                else
+                {
+                    ComputerMove();
+                }
+
                 DisplayBoard(Board);
+                gameOver = CheckWinner(Board);
+                if (gameOver)
+                {
+                    Winner = playerTurn ? Player : Computer;
+                    WriteLineWithColor($"{Winner} wins!", playerTurn ? ConsoleColor.Green : ConsoleColor.Yellow);
+                    break;
+                }
+
                 tie = CheckTie(Board);
                 if (tie)
                 {
-                    WriteLine("It's a tie!");
+                    WriteLineWithColor("It's a tie!", ConsoleColor.Magenta);
                     break;
                 }
-                noWinner = CheckWinner(Board);
 
-                if (noWinner == false)
+                playerTurn = !playerTurn;
+            }
+        }
+
+        private void PlayerMove()
+        {
+            bool validMove = false;
+            while (!validMove)
+            {
+                WriteLineWithColor($"{Player} enter a number between 1 and 9: ", ConsoleColor.Cyan);
+                if (int.TryParse(Console.ReadLine(), out int playerChoice) && IsValidChoice(playerChoice))
                 {
-                    Winner = Player;
-                    WriteLine($"{Player} wins!");
-                    break;
+                    try
+                    {
+                        UpdateBoardPlayer(playerChoice, Board);
+                        validMove = true;
+                    }
+                    catch (ArgumentException)
+                    {
+                        WriteLineWithColor("That space is already taken. Please choose another.", ConsoleColor.Red);
+                    }
                 }
-                
-                // Computer's turn
-                WriteLine("Computer is making a move...");
-                Thread.Sleep(1000); // Add a small delay to simulate thinking
-
-                int computerChoice = MakeComputerMove();
-                UpdateBoardComputer(computerChoice, Board);
-
-                DisplayBoard(Board);
-                tie = CheckTie(Board);
-                if (tie)
+                else
                 {
-                    WriteLine("It's a tie!");
-                    break;
-                }
-                noWinner = CheckWinner(Board);
-                if (noWinner == false)
-                {
-                    Winner = Computer;
-                    WriteLine("Computer wins!");
-                    break;
+                    WriteLineWithColor("Invalid choice. Please enter a number between 1 and 9.", ConsoleColor.Red);
                 }
             }
+        }
+
+        private void ComputerMove()
+        {
+            WriteLineWithColor("Computer is making a move...", ConsoleColor.Yellow);
+            Thread.Sleep(1000); // Add a small delay to simulate thinking
+
+            int computerChoice = MakeComputerMove();
+            UpdateBoardComputer(computerChoice, Board);
         }
 
         private int MakeComputerMove()
@@ -203,7 +253,7 @@ public class TicTacToe
                 {
                     char[,] tempBoard = (char[,])Board.Clone();
                     UpdateBoardComputer(i, tempBoard);
-                    if (!CheckWinner(tempBoard))
+                    if (CheckWinner(tempBoard))
                     {
                         return i;
                     }
@@ -217,7 +267,7 @@ public class TicTacToe
                 {
                     char[,] tempBoard = (char[,])Board.Clone();
                     UpdateBoardPlayer(i, tempBoard);
-                    if (!CheckWinner(tempBoard))
+                    if (CheckWinner(tempBoard))
                     {
                         return i;
                     }
@@ -254,7 +304,7 @@ public class TicTacToe
 
         private int Minimax(char[,] board, int depth, bool isMaximizing)
         {
-            if (!CheckWinner(board))
+            if (CheckWinner(board))
             {
                 return isMaximizing ? -1 : 1;
             }
@@ -305,11 +355,11 @@ public class TicTacToe
         }
         #endregion
 
-        #region UpdateBoardPlayer1 method
+        #region UpdateBoardPlayer method
         /// <summary>
-        /// Updates the Tic-Tac-Toe board with the player 1's choice.
+        /// Updates the Tic-Tac-Toe board with the player's choice.
         /// </summary>
-        /// <param name="player1Choice">The choice made by player 1 (1-9).</param>
+        /// <param name="playerChoice">The choice made by the player (1-9).</param>
         /// <param name="board">The Tic-Tac-Toe board.</param>
         private void UpdateBoardPlayer(int playerChoice, char[,] board)
         {
@@ -357,22 +407,32 @@ public class TicTacToe
         /// </summary>
         /// <param name="board">The Tic-Tac-Toe board represented as a 2D character array.</param>
         /// <returns>True if there is a winner, false otherwise.</returns>
-        public bool CheckWinner(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
-        {   
-            bool winner = true;
-            return winner switch
+        public bool CheckWinner(char[,] board)
+        {
+            // Define winning combinations
+            int[][] winCombos = new int[][]
             {
-                var letter when board[0, 1] == board[0, 5] && board[0, 5] == board[0, 9] && board[0, 9] != ' ' => winner = false,
-                var letter when board[2, 1] == board[2, 5] && board[2, 5] == board[2, 9] && board[2, 9] != ' ' => winner = false,
-                var letter when board[4, 1] == board[4, 5] && board[4, 9] == board[4, 5] && board[4, 5] != ' ' => winner = false,
-                var letter when board[0, 1] == board[2, 1] && board[2, 1] == board[4, 1] && board[4, 1] != ' ' => winner = false,
-                var letter when board[0, 5] == board[2, 5] && board[2, 5] == board[4, 5] && board[4, 5] != ' ' => winner = false,
-                var letter when board[0, 9] == board[2, 9] && board[2, 9] == board[4, 9] && board[4, 9] != ' ' => winner = false,
-                var letter when board[0, 1] == board[2, 5] && board[2, 5] == board[4, 9] && board[4, 9] != ' ' => winner = false,
-                var letter when board[0, 9] == board[2, 5] && board[2, 5] == board[4, 1] && board[4, 1] != ' ' => winner = false,
-                _ => winner,
+                new int[] {0, 1, 0, 5, 0, 9}, // Top row
+                new int[] {2, 1, 2, 5, 2, 9}, // Middle row
+                new int[] {4, 1, 4, 5, 4, 9}, // Bottom row
+                new int[] {0, 1, 2, 1, 4, 1}, // Left column
+                new int[] {0, 5, 2, 5, 4, 5}, // Middle column
+                new int[] {0, 9, 2, 9, 4, 9}, // Right column
+                new int[] {0, 1, 2, 5, 4, 9}, // Diagonal from top-left to bottom-right
+                new int[] {0, 9, 2, 5, 4, 1}  // Diagonal from top-right to bottom-left
             };
-            
+
+            foreach (var combo in winCombos)
+            {
+                if (board[combo[0], combo[1]] != ' ' &&
+                    board[combo[0], combo[1]] == board[combo[2], combo[3]] &&
+                    board[combo[0], combo[1]] == board[combo[4], combo[5]])
+                {
+                    return true; // We have a winner
+                }
+            }
+
+            return false; // No winner found
         }
         #endregion
 
@@ -382,14 +442,19 @@ public class TicTacToe
         /// </summary>
         /// <param name="board">The game board represented as a 2D char array.</param>
         /// <returns>True if the board is full, false otherwise.</returns>
-        public bool CheckTie(char[,] board) // [0,1] [0,5] [0,9]   [2,1] [2,5] [2,9]   [4,1] [4,5] [4,9]
+        public bool CheckTie(char[,] board)
         {
-            if (board[0,1] != ' ' && board[0,5] != ' ' && board[0,9] != ' ' && board[2,1] != ' ' && board[2,5] != ' ' && board[2,9] != ' ' && board[4,1] != ' ' && board[4,5] != ' ' && board[4,9] != ' ')
+            for (int i = 0; i <= 4; i += 2)
             {
-                return true;
+                for (int j = 1; j <= 9; j += 4)
+                {
+                    if (board[i, j] == ' ')
+                    {
+                        return false; // Found an empty space, game is not tied
+                    }
+                }
             }
-
-            return false;
+            return true; // All spaces are filled, game is tied
         }
         #endregion
 
@@ -401,9 +466,9 @@ public class TicTacToe
         /// <param name="board"></param>
         public void InvalidChoicePlayer1(int player1Choice, char[,] board)
         {
-            WriteLine("Invalid Choice");
-            WriteLine("Player 1 enter a number between 1 and 9: ");
-            player1Choice = Convert.ToInt32(ReadLine());
+            WriteLineWithColor("Invalid Choice", ConsoleColor.Red);
+            WriteLineWithColor("Player 1 enter a number between 1 and 9: ", ConsoleColor.Cyan);
+            player1Choice = Convert.ToInt32(Console.ReadLine());
             if (IsValidChoice(player1Choice))
             {
                 UpdateBoardPlayer(player1Choice, board);
@@ -413,11 +478,6 @@ public class TicTacToe
                 InvalidChoicePlayer1(player1Choice, board);
             }
         }
-        /// <summary>
-        /// logic for choices outside of the range of 1-9
-        /// </summary>
-        /// <param name="player2Choice"></param>
-        /// <param name="board"></param>
         /// <summary>
         /// checks to see if the choice is within the range of 1-9
         /// </summary>
@@ -439,13 +499,13 @@ public class TicTacToe
             while (true)
             {
                 Console.Clear();
-                WriteLine("Welcome to Tic-Tac-Toe!");
-                WriteLine("1. Start New Game");
-                WriteLine("2. How to Play");
-                WriteLine("3. Exit");
-                WriteLine("\nPlease enter your choice (1-3):");
+                WriteLineWithColor("Welcome to Tic-Tac-Toe!", ConsoleColor.Magenta);
+                WriteLineWithColor("1. Start New Game", ConsoleColor.Cyan);
+                WriteLineWithColor("2. How to Play", ConsoleColor.Cyan);
+                WriteLineWithColor("3. Exit", ConsoleColor.Cyan);
+                WriteLineWithColor("\nPlease enter your choice (1-3):", ConsoleColor.White);
 
-                string? choice = ReadLine();
+                string? choice = Console.ReadLine();
 
                 switch (choice)
                 {
@@ -456,11 +516,11 @@ public class TicTacToe
                         DisplayHowToPlay();
                         break;
                     case "3":
-                        WriteLine("Thank you for playing. Goodbye!");
+                        WriteLineWithColor("Thank you for playing. Goodbye!", ConsoleColor.Green);
                         return;
                     default:
-                        WriteLine("Invalid choice. Press any key to try again.");
-                        ReadKey();
+                        WriteLineWithColor("Invalid choice. Press any key to try again.", ConsoleColor.Red);
+                        Console.ReadKey();
                         break;
                 }
             }
@@ -469,50 +529,74 @@ public class TicTacToe
         private static void StartNewGame()
         {
             Console.Clear();
-            WriteLine("Enter your name:");
-            string? playerName = ReadLine();
+            WriteLineWithColor("Enter your name:", ConsoleColor.Cyan);
+            string? playerName = Console.ReadLine();
 
-            WriteLine("Select AI difficulty:");
-            WriteLine("1. Easy");
-            WriteLine("2. Medium");
-            WriteLine("3. Hard");
+            WriteLineWithColor("Select AI difficulty:", ConsoleColor.Yellow);
+            WriteLineWithColor("1. Easy", ConsoleColor.Green);
+            WriteLineWithColor("2. Medium", ConsoleColor.Yellow);
+            WriteLineWithColor("3. Hard", ConsoleColor.Red);
             
             AIDifficulty difficulty = AIDifficulty.Easy;
             while (true)
             {
-                string? difficultyChoice = ReadLine();
+                string? difficultyChoice = Console.ReadLine();
                 if (difficultyChoice == "1") { difficulty = AIDifficulty.Easy; break; }
                 if (difficultyChoice == "2") { difficulty = AIDifficulty.Medium; break; }
                 if (difficultyChoice == "3") { difficulty = AIDifficulty.Hard; break; }
-                WriteLine("Invalid choice. Please enter 1, 2, or 3.");
+                WriteLineWithColor("Invalid choice. Please enter 1, 2, or 3.", ConsoleColor.Red);
             }
 
             char[,] board = CreateBoard();
+            
+            // Display the initial game board with numbered positions
+            Console.Clear();
+            WriteLineWithColor("Here's the game board:", ConsoleColor.Magenta);
+            DisplayInitialBoard();
+            WriteLineWithColor("Remember these positions for your moves!", ConsoleColor.Yellow);
+            Console.WriteLine();
+
             TicTacToe game = new TicTacToe(playerName!, board, difficulty);
             game.PlayGame(playerName!);
 
-            WriteLine("Press any key to return to the main menu.");
-            ReadKey();
+            WriteLineWithColor("Press any key to return to the main menu.", ConsoleColor.White);
+            Console.ReadKey();
         }
 
         private static void DisplayHowToPlay()
         {
             Console.Clear();
-            WriteLine("How to Play Tic-Tac-Toe:");
-            WriteLine("1. The game is played on a 3x3 grid.");
-            WriteLine("2. You are X, the computer is O.");
-            WriteLine("3. Players take turns putting their marks in empty squares.");
-            WriteLine("4. The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.");
-            WriteLine("5. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.\n");
-            WriteLine(" 1 | 2 | 3 "); // [0,1] [0,5] [0,9]
-            WriteLine("___|___|___");
-            WriteLine(" 4 | 5 | 6 "); // [2,1] [2,5] [2,9]
-            WriteLine("___|___|___");
-            WriteLine(" 7 | 8 | 9 "); // [4,1] [4,5] [4,9]
-            WriteLine("   |   |   ");
-            WriteLine("\nPress any key to return to the main menu.");
-            ReadKey();
+            WriteLineWithColor("How to Play Tic-Tac-Toe:", ConsoleColor.Magenta);
+            WriteLineWithColor("1. The game is played on a 3x3 grid.", ConsoleColor.White);
+            WriteLineWithColor("2. You are X, the computer is O.", ConsoleColor.White);
+            WriteLineWithColor("3. Players take turns putting their marks in empty squares.", ConsoleColor.White);
+            WriteLineWithColor("4. The first player to get 3 of their marks in a row (up, down, across, or diagonally) is the winner.", ConsoleColor.White);
+            WriteLineWithColor("5. When all 9 squares are full, the game is over. If no player has 3 marks in a row, the game ends in a tie.", ConsoleColor.White);
+            WriteLineWithColor("6. Before the game starts, you'll participate in a coin flip to decide who goes first.", ConsoleColor.White);
+            WriteLineWithColor("\nHere's how the positions are numbered on the board:", ConsoleColor.Yellow);
+            DisplayInitialBoard();
+            WriteLineWithColor("\nPress any key to return to the main menu.", ConsoleColor.White);
+            Console.ReadKey();
+        }
+        #endregion
+
+        #region Helper Methods
+        private static void WriteLineWithColor(string message, ConsoleColor color)
+        {
+            Console.ForegroundColor = color;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
+
+        private static void DisplayInitialBoard()
+        {
+            WriteLineWithColor(" 1 | 2 | 3 ", ConsoleColor.Cyan);
+            WriteLineWithColor("___|___|___", ConsoleColor.Cyan);
+            WriteLineWithColor(" 4 | 5 | 6 ", ConsoleColor.Cyan);
+            WriteLineWithColor("___|___|___", ConsoleColor.Cyan);
+            WriteLineWithColor(" 7 | 8 | 9 ", ConsoleColor.Cyan);
+            WriteLineWithColor("   |   |   ", ConsoleColor.Cyan);
         }
         #endregion
 }
-    #endregion
+#endregion

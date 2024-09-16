@@ -33,11 +33,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\PlayGame.csproj",
+      "projectUniqueName": "c:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\PlayGame.csproj",
       "projectName": "PlayGame",
-      "projectPath": "C:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\PlayGame.csproj",
+      "projectPath": "c:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\PlayGame.csproj",
       "packagesPath": "C:\\Users\\brett\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\obj\\",
+      "outputPath": "c:\\Users\\brett\\Documents\\csharp\\Tic-Tac-Toe\\PlayGame\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
