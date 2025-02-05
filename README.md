@@ -20,9 +20,11 @@ To set up .NET 8, follow these steps:
 ## How to Play
 
 1. Run the game.
-   '''bash
+
+    ```bash
    dotnet run --project PlayGame/PlayGame.csproj
-   '''
+    ```
+
 2. Select your difficulty level.
 3. The game board will be displayed, with numbers 1-9 representing the available moves.
 4. Enter the number corresponding to the position where you want to place your mark (X).
